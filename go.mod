@@ -1,4 +1,4 @@
-module github.com/leodido/go-conventionalcommits
+module github.com/reviewpad/go-conventionalcommits
 
 go 1.18
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/leodido/go-conventionalcommits"
+	"github.com/reviewpad/go-conventionalcommits"
 	"github.com/sirupsen/logrus"
 	logrustest "github.com/sirupsen/logrus/hooks/test"
 	"github.com/stretchr/testify/assert"
@@ -12,10 +12,6 @@ import (
 
 func TestMachineParse(t *testing.T) {
 	runner(t, "minimaltypes", testCases, WithTypes(conventionalcommits.TypesMinimal))
-}
-
-func TestMachineParseWithFalcoTypes(t *testing.T) {
-	runner(t, "falcotypes", testCasesForFalcoTypes, WithTypes(conventionalcommits.TypesFalco))
 }
 
 func TestMachineParseWithConventionalTypes(t *testing.T) {
@@ -71,19 +67,6 @@ func TestMachineBestEffortOption(t *testing.T) {
 
 	p2 := NewMachine(WithBestEffort()).(conventionalcommits.BestEfforter)
 	assert.True(t, p2.HasBestEffort())
-}
-
-func TestMachineTypeConfigOption(t *testing.T) {
-	p := NewMachine(WithTypes(conventionalcommits.TypesFalco))
-	mes, err := p.Parse([]byte("new: ciao"))
-
-	res := &conventionalcommits.ConventionalCommit{
-		Type:        "new",
-		Description: "ciao",
-	}
-
-	assert.NoError(t, err)
-	assert.Equal(t, res, mes)
 }
 
 func TestParseLoggingErrorsOnly(t *testing.T) {

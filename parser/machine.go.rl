@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"bytes"
 
-	"github.com/leodido/go-conventionalcommits"
+	"github.com/reviewpad/go-conventionalcommits"
 	"github.com/sirupsen/logrus"
 )
 
@@ -226,8 +226,6 @@ minimal_types = ('fix'i | 'feat'i);
 
 conventional_types = ('build'i | 'ci'i | 'chore'i | 'docs'i | 'feat'i | 'fix'i | 'perf'i | 'refactor'i | 'revert'i | 'style'i | 'test'i);
 
-falco_types = ('build'i | 'ci'i | 'chore'i | 'docs'i | 'feat'i | 'fix'i | 'perf'i | 'new'i | 'revert'i | 'update'i | 'test'i | 'rule'i);
-
 free_form_types = print+;
 
 scope = lpar ((print* -- lpar) -- rpar) >mark %err(err_malformed_scope) %eof(err_malformed_scope_closing) %set_scope rpar;
@@ -278,13 +276,6 @@ main := minimal_types >eof(err_empty) >mark @err(err_type) %from(set_type) %to(c
 	remainder?;
 
 conventional_types_main := conventional_types >eof(err_empty) >mark @err(err_type) %from(set_type) %to(check_early_exit)
-	scope? %to(check_early_exit)
-	breaking? %to(check_early_exit)
-	colon >err(err_colon) %to(check_early_exit)
-	description
-	remainder?;
-
-falco_types_main := falco_types >eof(err_empty) >mark @err(err_type) %from(set_type) %to(check_early_exit)
 	scope? %to(check_early_exit)
 	breaking? %to(check_early_exit)
 	colon >err(err_colon) %to(check_early_exit)
@@ -399,9 +390,6 @@ func (m *machine) Parse(input []byte) (conventionalcommits.Message, error) {
 	switch m.typeConfig {
 	case conventionalcommits.TypesFreeForm:
 		m.cs = en_free_form_types_main
-		break
-	case conventionalcommits.TypesFalco:
-		m.cs = en_falco_types_main
 		break
 	case conventionalcommits.TypesConventional:
 		m.cs = en_conventional_types_main

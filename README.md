@@ -1,6 +1,6 @@
 # go-conventionalcommits
 
-[![Build](https://img.shields.io/circleci/build/github/leodido/go-conventionalcommits/develop?style=for-the-badge)](https://app.circleci.com/pipelines/github/leodido/go-conventionalcommits) [![Coverage](https://img.shields.io/codecov/c/github/leodido/go-conventionalcommits/develop?style=for-the-badge)](https://codecov.io/gh/leodido/go-conventionalcommits) [![License](https://img.shields.io/github/license/leodido/go-conventionalcommits?style=for-the-badge)](LICENSE) [![Go Report](https://goreportcard.com/badge/github.com/leodido/go-conventionalcommits?style=for-the-badge)](https://goreportcard.com/report/github.com/leodido/go-conventionalcommits)
+[![Build](https://img.shields.io/circleci/build/github/leodido/go-conventionalcommits/develop?style=for-the-badge)](https://app.circleci.com/pipelines/github/leodido/go-conventionalcommits) [![Coverage](https://img.shields.io/codecov/c/github/leodido/go-conventionalcommits/develop?style=for-the-badge)](https://codecov.io/gh/leodido/go-conventionalcommits) [![License](https://img.shields.io/github/license/leodido/go-conventionalcommits?style=for-the-badge)](LICENSE) [![Go Report](https://goreportcard.com/badge/github.com/reviewpad/go-conventionalcommits?style=for-the-badge)](https://goreportcard.com/report/github.com/reviewpad/go-conventionalcommits)
 
 **A parser for [Conventional Commits v1.0](https://www.conventionalcommits.org/en/v1.0.0/#specification) commit messages**.
 
@@ -11,12 +11,12 @@ This repository provides a library to parse your commit messages according to th
 ## Installation
 
 ```console
-go get github.com/leodido/go-conventionalcommits
+go get github.com/reviewpad/go-conventionalcommits
 ```
 
 ## Docs
 
-[![Documentation](https://img.shields.io/badge/godoc-reference-blue.svg?style=for-the-badge)](http://godoc.org/github.com/leodido/go-conventionalcommits)
+[![Documentation](https://img.shields.io/badge/godoc-reference-blue.svg?style=for-the-badge)](http://godoc.org/github.com/reviewpad/go-conventionalcommits)
 
 The [parser/docs](parser/docs/) directory contains `.dot` and `.png` files representing the finite-state machines (FSMs) implementing the parser.
 
@@ -72,7 +72,6 @@ This library provides support for different types sets:
 
 - **minimal**: fix, feat
 - **conventional**: build, ci, chore, docs, feat, fix, perf, refactor, revert, style, test
-- **falco**: build, ci, chore, docs, feat, fix, perf, new, revert, update, test, rule
 
 At the moment, those types are at build time. Which means users can't configure them at runtime.
 

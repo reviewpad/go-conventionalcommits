@@ -3,8 +3,8 @@ package parser
 import (
 	"testing"
 
-	"github.com/leodido/go-conventionalcommits"
-	cctesting "github.com/leodido/go-conventionalcommits/testing"
+	"github.com/reviewpad/go-conventionalcommits"
+	cctesting "github.com/reviewpad/go-conventionalcommits/testing"
 )
 
 // Avoid compiler optimizations that could remove the actual call we are benchmarking during benchmarks

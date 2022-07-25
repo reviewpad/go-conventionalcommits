@@ -3,7 +3,7 @@ package parser
 import (
 	"strings"
 
-	"github.com/leodido/go-conventionalcommits"
+	"github.com/reviewpad/go-conventionalcommits"
 )
 
 type conventionalCommit struct {

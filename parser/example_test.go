@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/davecgh/go-spew/spew"
-	"github.com/leodido/go-conventionalcommits"
+	"github.com/reviewpad/go-conventionalcommits"
 )
 
 func output(out interface{}) {

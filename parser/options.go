@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"github.com/leodido/go-conventionalcommits"
+	"github.com/reviewpad/go-conventionalcommits"
 	"github.com/sirupsen/logrus"
 )
 
