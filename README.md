@@ -14,8 +14,6 @@ go get github.com/reviewpad/go-conventionalcommits
 
 ## Docs
 
-[![Documentation](https://img.shields.io/badge/godoc-reference-blue.svg?style=for-the-badge)](http://godoc.org/github.com/reviewpad/go-conventionalcommits)
-
 The [parser/docs](parser/docs/) directory contains `.dot` and `.png` files representing the finite-state machines (FSMs) implementing the parser.
 
 ## Usage
