@@ -173,4 +173,6 @@ Parsing a commit goes from taking about the same amount of time (~299ns) the hal
 
 ---
 
-[![Analytics](https://ga-beacon.appspot.com/UA-49657176-1/go-conventionalcommits?flat)](https://github.com/igrigorik/ga-beacon)
+## Credits
+
+This project was originally forked from https://github.com/leodido/go-conventionalcommits.
