@@ -17,7 +17,7 @@ dots:
 	@mkdir -p parser/docs
 
 .PHONY: docs
-docs: dots parser/docs/minimal_types.png parser/docs/falco_types.png parser/docs/conventional_types.png parser/docs/free_form_types.png parser/docs/body.png parser/docs/trailer_beg.png parser/docs/trailer_end.png
+docs: dots parser/docs/minimal_types.png parser/docs/conventional_types.png parser/docs/free_form_types.png parser/docs/body.png parser/docs/trailer_beg.png parser/docs/trailer_end.png
 
 .PHONY: snake2camel
 snake2camel:
@@ -31,12 +31,6 @@ parser/docs/minimal_types.dot: parser/machine.go.rl common/common.rl
 	$(RAGEL) -Z -Vp -M main $< -o $@
 
 parser/docs/minimal_types.png: parser/docs/minimal_types.dot
-	dot $< -Tpng -o $@
-
-parser/docs/falco_types.dot: parser/machine.go.rl common/common.rl
-	$(RAGEL) -Z -Vp -M falco_types_main $< -o $@
-
-parser/docs/falco_types.png: parser/docs/falco_types.dot
 	dot $< -Tpng -o $@
 
 parser/docs/conventional_types.dot: parser/machine.go.rl common/common.rl

@@ -13,9 +13,6 @@ const (
 	// TypesConventional represents the conventional set of types.
 	// See https://github.com/conventional-changelog/commitlint/tree/master/%40commitlint/config-conventional
 	TypesConventional
-	// TypesFalco represents the set of types that Falco uses for its release notes.
-	// See https://github.com/falcosecurity/falco
-	TypesFalco
 	// TypesFreeForm represents a free-form set of types.
 	TypesFreeForm
 )
