@@ -13,6 +13,7 @@ type conventionalCommit struct {
 	exclamation bool
 	body        string
 	footers     map[string][]string
+	typeconfig  conventionalcommits.TypeConfig
 }
 
 func (c *conventionalCommit) minimal() bool {
@@ -24,6 +25,7 @@ func (c *conventionalCommit) export() conventionalcommits.Message {
 	out.Exclamation = c.exclamation
 	out.Type = strings.ToLower(c._type)
 	out.Description = c.descr
+	out.TypeConfig = c.typeconfig
 	if c.scope != "" {
 		c.scope = strings.ToLower(c.scope)
 		out.Scope = &c.scope

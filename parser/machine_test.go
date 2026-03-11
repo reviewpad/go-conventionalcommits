@@ -11,43 +11,48 @@ import (
 )
 
 func TestMachineParse(t *testing.T) {
-	runner(t, "minimaltypes", testCases, WithTypes(conventionalcommits.TypesMinimal))
+	runner(t, "minimaltypes", testCases, conventionalcommits.TypesMinimal, WithTypes(conventionalcommits.TypesMinimal))
 }
 
 func TestMachineParseWithConventionalTypes(t *testing.T) {
-	runner(t, "conventionaltypes", testCasesForConventionalTypes, WithTypes(conventionalcommits.TypesConventional))
+	runner(t, "conventionaltypes", testCasesForConventionalTypes, conventionalcommits.TypesConventional, WithTypes(conventionalcommits.TypesConventional))
 }
 
 func TestMachineParseWithFreeFormTypes(t *testing.T) {
-	runner(t, "freeformtypes", testCasesForFreeFormTypes, WithTypes(conventionalcommits.TypesFreeForm))
+	runner(t, "freeformtypes", testCasesForFreeFormTypes, conventionalcommits.TypesFreeForm, WithTypes(conventionalcommits.TypesFreeForm))
 }
 
-func runner(t *testing.T, label string, cases []testCase, machineOpts ...conventionalcommits.MachineOption) {
+func setTypeConfig(msg conventionalcommits.Message, tc conventionalcommits.TypeConfig) {
+	if cc, ok := msg.(*conventionalcommits.ConventionalCommit); ok {
+		cc.TypeConfig = tc
+	}
+}
+
+func runner(t *testing.T, label string, cases []testCase, typeConfig conventionalcommits.TypeConfig, machineOpts ...conventionalcommits.MachineOption) {
 	t.Helper()
 
 	for _, tc := range cases {
 		tc := tc
 		title := fmt.Sprintf("%s/%s", label, tc.title)
 
+		setTypeConfig(tc.value, typeConfig)
+		setTypeConfig(tc.partialValue, typeConfig)
+
 		t.Run(title, func(t *testing.T) {
 			message, messageErr := NewMachine(machineOpts...).Parse(tc.input)
 			partial, partialErr := NewMachine(append(machineOpts, WithBestEffort())...).Parse(tc.input)
 
 			if !tc.ok {
-				// We expect the test case input to be an invalid commit message
 				assert.Nil(t, message)
 				assert.Error(t, messageErr)
 				assert.EqualError(t, messageErr, tc.errorString)
 
-				// In this case can happen that with best effort mode o
-				// the result is not nil rather it contains a minimal valid result
 				if partial != nil {
 					assert.True(t, partial.Ok())
 				}
 				assert.Equal(t, tc.partialValue, partial)
 				assert.EqualError(t, partialErr, tc.errorString)
 			} else {
-				// We expect the test case intput to be a valid commit message
 				assert.Nil(t, messageErr)
 				assert.NotEmpty(t, message)
 				assert.True(t, message.Ok())

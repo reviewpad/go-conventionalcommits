@@ -13,6 +13,9 @@ const (
 	// TypesConventional represents the conventional set of types.
 	// See https://github.com/conventional-changelog/commitlint/tree/master/%40commitlint/config-conventional
 	TypesConventional
+	// TypesFalco represents the set of types that Falco uses for its release notes.
+	// See https://github.com/falcosecurity/falco
+	TypesFalco
 	// TypesFreeForm represents a free-form set of types.
 	TypesFreeForm
 )
@@ -21,6 +24,16 @@ const (
 type TypeConfigurer interface {
 	WithTypes(t TypeConfig)
 }
+
+// VersionBump represent the set of possible version bumps a commit can mandate.
+type VersionBump int
+
+const (
+	UnknownVersion VersionBump = iota
+	PatchVersion
+	MinorVersion
+	MajorVersion
+)
 
 // BestEfforter is an interface that wraps the methods about the best effort mode.
 type BestEfforter interface {
@@ -48,6 +61,9 @@ type MachineOption func(m Machine) Machine
 type Message interface {
 	Ok() bool
 	IsBreakingChange() bool
+	IsFeat() bool
+	IsFix() bool
+	VersionBump(VersionBumpStrategy) VersionBump
 	HasFooter() bool
 }
 
@@ -55,10 +71,29 @@ type Message interface {
 type ConventionalCommit struct {
 	Type        string
 	Description string
-	Scope       *string // optional
+	Scope       *string             // optional
 	Exclamation bool
 	Body        *string             // optional
 	Footers     map[string][]string // optional
+	TypeConfig  TypeConfig
+}
+
+// VersionBumpStrategy represents a strategy how to evaluate the version bump depending on the TypeConfig initially used and the commits type.
+type VersionBumpStrategy func(*ConventionalCommit) VersionBump
+
+// DefaultStrategy is a basic, opinionated strategy to evaluate the version bump.
+func DefaultStrategy(c *ConventionalCommit) VersionBump {
+	if c.IsBreakingChange() {
+		return MajorVersion
+	}
+	if c.IsFeat() {
+		return MinorVersion
+	}
+	if c.IsFix() {
+		return PatchVersion
+	}
+
+	return UnknownVersion
 }
 
 // Ok tells whether the receiving commit message is well-formed or not.
@@ -71,7 +106,31 @@ func (c *ConventionalCommit) Ok() bool {
 // IsBreakingChange tells whether the receiving commit message struct represents a breaking change or not.
 func (c *ConventionalCommit) IsBreakingChange() bool {
 	_, hasBreakingChangeTrailer := c.Footers["breaking-change"]
+
 	return c.Exclamation || hasBreakingChangeTrailer
+}
+
+// IsFeat tells whether the receiving commit message struct represents a feat change or not.
+func (c *ConventionalCommit) IsFeat() bool {
+	if c.TypeConfig == TypesFalco && c.Type == "new" {
+		return true
+	}
+
+	return c.Type == "feat"
+}
+
+// IsFix tells whether the receiving commit message struct represents a fix change or not.
+func (c *ConventionalCommit) IsFix() bool {
+	return c.Type == "fix"
+}
+
+// VersionBump tells which version bump the receiving commit message mandates.
+func (c *ConventionalCommit) VersionBump(strategy VersionBumpStrategy) VersionBump {
+	if strategy == nil {
+		return DefaultStrategy(c)
+	}
+
+	return strategy(c)
 }
 
 // HasFooter tells whether the receiving commit message struct has one or more trailers.
